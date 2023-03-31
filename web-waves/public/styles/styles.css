@@ -1,0 +1,11 @@
+#user-container {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 22px;
+  width: 100%;
+  right: 0;
+  padding-left: 10px;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
