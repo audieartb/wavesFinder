@@ -43,7 +43,7 @@ document.getElementById("search-artist-btn").addEventListener("click", () => {
       `http://127.0.0.1:5001/wavesfinder-5d157/us-central1/api/user/search?artist=${artist}`
     )
     .then((res) => {
-      document.getElementById("artist-search-container").innerHTML = "";
+      clearSearchResults();
       console.log(res.data.results.artists.items);
       const artistList = res.data.results.artists.items;
       showArtists(artistList);
@@ -99,8 +99,8 @@ async function showArtists(artistList) {
     <div class="card text-center d-flex flex-column col-3 m-3" id="${el.id}" style="width: 15rem; height: 25rem">
           <img src="${imgUrl}" style="width: 235px;height:235px" id="img-${el.id}"  class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 class="card-title">${el.name}</h5>
-            <p class="card-text">${el.followers.total} followers</p>
+          <a href="${el.external_urls.spotify}" target="_blank class="card-title"><h5>${el.name}</h5></a>
+            <p class="card-text no-style">${el.followers.total} followers</p>
             <button id="add-favorite-${el.id}" type="button" onclick="addRemoveFavorites('${el.id}')" class="btn ${favButtonState}"><i data-feather="heart"></i></button>
             <button type="button" onclick="getMoreLikeThis('${el.id}')" class="align-self-end btn btn-primary">More like this</button>
           </div>
@@ -217,16 +217,19 @@ async function getFavorites(userId) {
     console.log(error);
   }
 }
+function clearSearchResults() {
+  document.getElementById("artist-search-container").innerHTML = "";
+}
 
 document.getElementById("get-favorites").addEventListener("click", async () => {
   const user = getCurrentUser();
   const favList = await getFavorites(user.uid);
   const favListStr = favList.join();
-  console.log(favListStr);
+
   const favArtists = await axios.get(
     `http://127.0.0.1:5001/wavesfinder-5d157/us-central1/api/user/favorites?artists=${favListStr}`
   );
-  console.log("favorites artists ", favArtists.data.artists);
+  clearSearchResults();
   showArtists(favArtists.data.artists);
 });
 
@@ -241,6 +244,7 @@ async function getMoreLikeThis(artist) {
     );
     console.log();
     const relatedData = related.data.related.artists;
+    clearSearchResults();
     showArtists(relatedData);
   } catch (error) {
     console.log("Error getting related", error);
