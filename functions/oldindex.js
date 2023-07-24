@@ -197,3 +197,32 @@ async function redirectToAuthCodeFlow(CLIENT_ID) {
       code_challenge: challenge,
     });
 }
+
+//dbContext.jsx
+import { app } from "../db/firebase";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  getFirestore,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+
+const DBProvider = ({ children, currentUser }) => {
+  const db = getFirestore();
+  const usersRef = collection(db, "users");
+  const userDataDoc = doc(db, "users", currentUser.uid);
+
+  const updateGenres = (genres) => {
+    /* checks */
+    console.log(userDataDoc); // correct user that im trying to update -> does this return the id or the user data?
+    console.log(userData); // correct user --> where is this userData coming from?
+    console.log(genres); // correct data --> what type of data is genres? array?
+
+    /* returns an error */
+    return updateDoc(userDataDoc, { zhaner: genres });
+  };
+};

@@ -1,3 +1,5 @@
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 const config = {
   apiKey: "AIzaSyB79uaSiJ2ZoiCn_9vwST272xtPfLYL4h4",
   authDomain: "wavesfinder-5d157.firebaseapp.com",
@@ -21,3 +23,17 @@ export function getFirebaseConfig() {
     return config;
   }
 }
+const app = initializeApp(config);
+export const auth = getAuth(app);
+
+//const provider = new GoogleAuthProvider();
+
+// export const googleSignInPopup = () => {
+//   signInWithPopup(auth, provider)
+//     .then((result) => {
+//       console.log("this is good", result);
+//     })
+//     .catch((error) => {
+//       console.error("this is bad", error);
+//     });
+// };

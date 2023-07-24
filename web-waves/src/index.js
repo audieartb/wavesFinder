@@ -34,6 +34,26 @@ import {
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { getPerformance } from "firebase/performance";
 import { getFirebaseConfig } from "./firebase-config.js";
+import { getFunctions, httpsCallable } from "firebase/functions";
+
+document.getElementById("functest").addEventListener("click", async () => {
+  createUser();
+
+  return;
+  // const functions = getFunctions();
+  // const testMessage = httpsCallable(functions, "createStripeCheckout");
+  // testMessage({ text: "visa" })
+  //   .then((result) => {
+  //     console.log(result.data);
+  //   })
+  //   .catch((error) => console.log(error));
+});
+document
+  .getElementById("function-update")
+  .addEventListener("click", async () => {
+    updateDogs();
+    return;
+  });
 
 document.getElementById("search-artist-btn").addEventListener("click", () => {
   const artist = document.getElementById("artist-input").value;
@@ -120,6 +140,7 @@ async function signIn() {
 }
 //SIGNS OUT
 function signOutUser() {
+  console.log("sign out");
   signOut(getAuth());
 }
 
@@ -188,6 +209,32 @@ async function addFavorite(artistId, userId) {
     const favoritesRef = doc(db, "Favorites", userId);
     await updateDoc(favoritesRef, { favorites: arrayUnion(artistId) });
     changeFavoriteIcon(artistId);
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function createUser() {
+  try {
+    const docRef = await addDoc(collection(db, "Users"), {
+      name: "Dan",
+      lastname: "Doe",
+    });
+    console.log("created");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function updateDogs() {
+  try {
+    const userRef = await doc(db, "Users", "aN72wKpSKQJHB7wK8xeud");
+    console.log(userRef);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      return updateDoc(userRef, { dogs: ["Buddy", "Milo", "Duke"] });
+    } else {
+      console.log("document does not exist");
+    }
   } catch (error) {
     console.log(error);
   }
